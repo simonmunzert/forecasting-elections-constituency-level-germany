@@ -1,0 +1,192 @@
+model
+{
+### cdsu model
+        for(i in 1:ns)
+        {
+                for(j in 1:n[i])
+                {
+                y.cdsu[cumn[i]+j] ~ dbern(p.cdsu[cumn[i]+j])
+                logit(p.cdsu[cumn[i]+j]) <-
+					beta.cdsu[s[i]]
+					+ b.cdsu.recall.cdsu*recall.cdsu[cumn[i]+j]
+					+ b.cdsu.recall.spd*recall.spd[cumn[i]+j]
+					+ b.cdsu.recall.fdp*recall.fdp[cumn[i]+j]
+					+ b.cdsu.recall.gru*recall.gru[cumn[i]+j]
+					+ b.cdsu.recall.lin*recall.lin[cumn[i]+j]
+					+ v.cdsu[s[i]]
+                }
+			u.cdsu[s[i]] ~ dnorm(0, tauu.cdsu)
+        }
+
+        for(i in 1:N)
+        {		
+				beta.cdsu[i] <- b.cdsu.0 + b.cdsu.loginvdistsize*loginvdistsize[i] + u.cdsu[i]
+        }
+
+    v.cdsu[1:N] ~ car.normal(nb[], weight[], num[], tauv.cdsu)
+
+    b.cdsu.0 ~ dflat()
+    b.cdsu.loginvdistsize ~ dnorm(0,.001)
+	b.cdsu.recall.cdsu ~ dnorm(0,.001)
+	b.cdsu.recall.spd ~ dnorm(0,.001)
+	b.cdsu.recall.fdp ~ dnorm(0,.001)
+	b.cdsu.recall.gru ~ dnorm(0,.001)
+	b.cdsu.recall.lin ~ dnorm(0,.001)
+	
+	tauu.cdsu <- pow(sigma2u.cdsu, -2)
+	sigma2u.cdsu ~ dunif(0,2)
+	tauv.cdsu <- pow(sigma2v.cdsu, -2)
+	sigma2v.cdsu ~ dunif(0,2)
+	
+### spd model
+        for(i in 1:ns)
+        {
+                for(j in 1:n[i])
+                {
+                y.spd[cumn[i]+j] ~ dbern(p.spd[cumn[i]+j])
+                logit(p.spd[cumn[i]+j]) <-
+					beta.spd[s[i]]
+					+ b.spd.recall.cdsu*recall.cdsu[cumn[i]+j]
+					+ b.spd.recall.spd*recall.spd[cumn[i]+j]
+					+ b.spd.recall.fdp*recall.fdp[cumn[i]+j]
+					+ b.spd.recall.gru*recall.gru[cumn[i]+j]
+					+ b.spd.recall.lin*recall.lin[cumn[i]+j]
+					+ v.spd[s[i]]
+                }
+			u.spd[s[i]] ~ dnorm(0, tauu.spd)
+        }
+
+        for(i in 1:N)
+        {		
+				beta.spd[i] <- b.spd.0 + b.spd.loginvdistsize*loginvdistsize[i] + u.spd[i]
+        }
+
+    v.spd[1:N] ~ car.normal(nb[], weight[], num[], tauv.spd)
+
+    b.spd.0 ~ dflat()
+    b.spd.loginvdistsize ~ dnorm(0,.001)
+	b.spd.recall.cdsu ~ dnorm(0,.001)
+	b.spd.recall.spd ~ dnorm(0,.001)
+	b.spd.recall.fdp ~ dnorm(0,.001)
+	b.spd.recall.gru ~ dnorm(0,.001)
+	b.spd.recall.lin ~ dnorm(0,.001)
+	
+	tauu.spd <- pow(sigma2u.spd, -2)
+	sigma2u.spd ~ dunif(0,2)
+	tauv.spd <- pow(sigma2v.spd, -2)
+	sigma2v.spd ~ dunif(0,2)
+		
+### fdp model
+        for(i in 1:ns)
+        {
+                for(j in 1:n[i])
+                {
+                y.fdp[cumn[i]+j] ~ dbern(p.fdp[cumn[i]+j])
+                logit(p.fdp[cumn[i]+j]) <-
+					beta.fdp[s[i]]
+					+ b.fdp.recall.cdsu*recall.cdsu[cumn[i]+j]
+					+ b.fdp.recall.spd*recall.spd[cumn[i]+j]
+					+ b.fdp.recall.fdp*recall.fdp[cumn[i]+j]
+					+ b.fdp.recall.gru*recall.gru[cumn[i]+j]
+					+ b.fdp.recall.lin*recall.lin[cumn[i]+j]
+					+ v.fdp[s[i]]
+                }
+			u.fdp[s[i]] ~ dnorm(0, tauu.fdp)
+        }
+
+        for(i in 1:N)
+        {		
+				beta.fdp[i] <- b.fdp.0 + b.fdp.loginvdistsize*loginvdistsize[i] + u.fdp[i]
+        }
+
+    v.fdp[1:N] ~ car.normal(nb[], weight[], num[], tauv.fdp)
+
+    b.fdp.0 ~ dflat()
+    b.fdp.loginvdistsize ~ dnorm(0,.001)
+	b.fdp.recall.cdsu ~ dnorm(0,.001)
+	b.fdp.recall.spd ~ dnorm(0,.001)
+	b.fdp.recall.fdp ~ dnorm(0,.001)
+	b.fdp.recall.gru ~ dnorm(0,.001)
+	b.fdp.recall.lin ~ dnorm(0,.001)
+	
+	tauu.fdp <- pow(sigma2u.fdp, -2)
+	sigma2u.fdp ~ dunif(0,2)
+	tauv.fdp <- pow(sigma2v.fdp, -2)
+	sigma2v.fdp ~ dunif(0,2)
+		
+### gru model
+        for(i in 1:ns)
+        {
+                for(j in 1:n[i])
+                {
+                y.gru[cumn[i]+j] ~ dbern(p.gru[cumn[i]+j])
+                logit(p.gru[cumn[i]+j]) <-
+					beta.gru[s[i]]
+					+ b.gru.recall.cdsu*recall.cdsu[cumn[i]+j]
+					+ b.gru.recall.spd*recall.spd[cumn[i]+j]
+					+ b.gru.recall.fdp*recall.fdp[cumn[i]+j]
+					+ b.gru.recall.gru*recall.gru[cumn[i]+j]
+					+ b.gru.recall.lin*recall.lin[cumn[i]+j]
+					+ v.gru[s[i]]
+                }
+			u.gru[s[i]] ~ dnorm(0, tauu.gru)
+        }
+
+        for(i in 1:N)
+        {		
+				beta.gru[i] <- b.gru.0 + b.gru.loginvdistsize*loginvdistsize[i] + u.gru[i]
+        }
+
+    v.gru[1:N] ~ car.normal(nb[], weight[], num[], tauv.gru)
+
+    b.gru.0 ~ dflat()
+    b.gru.loginvdistsize ~ dnorm(0,.001)
+	b.gru.recall.cdsu ~ dnorm(0,.001)
+	b.gru.recall.spd ~ dnorm(0,.001)
+	b.gru.recall.fdp ~ dnorm(0,.001)
+	b.gru.recall.gru ~ dnorm(0,.001)
+	b.gru.recall.lin ~ dnorm(0,.001)
+	
+	tauu.gru <- pow(sigma2u.gru, -2)
+	sigma2u.gru ~ dunif(0,2)
+	tauv.gru <- pow(sigma2v.gru, -2)
+	sigma2v.gru ~ dunif(0,2)
+		
+### lin model
+        for(i in 1:ns)
+        {
+                for(j in 1:n[i])
+                {
+                y.lin[cumn[i]+j] ~ dbern(p.lin[cumn[i]+j])
+                logit(p.lin[cumn[i]+j]) <-
+					beta.lin[s[i]]
+					+ b.lin.recall.cdsu*recall.cdsu[cumn[i]+j]
+					+ b.lin.recall.spd*recall.spd[cumn[i]+j]
+					+ b.lin.recall.fdp*recall.fdp[cumn[i]+j]
+					+ b.lin.recall.gru*recall.gru[cumn[i]+j]
+					+ b.lin.recall.lin*recall.lin[cumn[i]+j]
+					+ v.lin[s[i]]
+                }
+			u.lin[s[i]] ~ dnorm(0, tauu.lin)
+        }
+
+        for(i in 1:N)
+        {		
+				beta.lin[i] <- b.lin.0 + b.lin.loginvdistsize*loginvdistsize[i] + u.lin[i]
+        }
+
+    v.lin[1:N] ~ car.normal(nb[], weight[], num[], tauv.lin)
+
+    b.lin.0 ~ dflat()
+    b.lin.loginvdistsize ~ dnorm(0,.001)
+	b.lin.recall.cdsu ~ dnorm(0,.001)
+	b.lin.recall.spd ~ dnorm(0,.001)
+	b.lin.recall.fdp ~ dnorm(0,.001)
+	b.lin.recall.gru ~ dnorm(0,.001)
+	b.lin.recall.lin ~ dnorm(0,.001)
+	
+	tauu.lin <- pow(sigma2u.lin, -2)
+	sigma2u.lin ~ dunif(0,2)
+	tauv.lin <- pow(sigma2v.lin, -2)
+	sigma2v.lin ~ dunif(0,2)
+}

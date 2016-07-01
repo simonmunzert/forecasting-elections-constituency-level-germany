@@ -1,0 +1,14 @@
+c(
+"b.cdsu.0", "b.spd.0", "b.fdp.0", "b.gru.0", "b.lin.0",
+"beta.cdsu", "beta.spd", "beta.fdp", "beta.gru", "beta.lin", 
+"b.cdsu.recall.cdsu", "b.spd.recall.cdsu", "b.fdp.recall.cdsu", "b.gru.recall.cdsu", "b.lin.recall.cdsu", 
+"b.cdsu.recall.spd", "b.spd.recall.spd", "b.fdp.recall.spd", "b.gru.recall.spd", "b.lin.recall.spd", 
+"b.cdsu.recall.fdp", "b.spd.recall.fdp", "b.fdp.recall.fdp", "b.gru.recall.fdp", "b.lin.recall.fdp", 
+"b.cdsu.recall.gru", "b.spd.recall.gru", "b.fdp.recall.gru", "b.gru.recall.gru", "b.lin.recall.gru", 
+"b.cdsu.recall.lin", "b.spd.recall.lin", "b.fdp.recall.lin", "b.gru.recall.lin", "b.lin.recall.lin", 
+"b.cdsu.loginvdistsize", "b.spd.loginvdistsize", "b.fdp.loginvdistsize", "b.gru.loginvdistsize", "b.lin.loginvdistsize", 
+"v.cdsu", "v.spd", "v.fdp", "v.gru", "v.lin", 
+"u.cdsu", "u.spd", "u.fdp", "u.gru", "u.lin",
+"sigma2v.cdsu", "sigma2v.spd", "sigma2v.fdp", "sigma2v.gru", "sigma2v.lin", 
+"sigma2u.cdsu", "sigma2u.spd", "sigma2u.fdp", "sigma2u.gru", "sigma2u.lin"
+)

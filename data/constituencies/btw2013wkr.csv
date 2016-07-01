@@ -1,0 +1,300 @@
+jahr;wkr_nr;wkr_name
+2013;1;Flensburg – Schleswig
+2013;2;Nordfriesland – Dithmarschen Nord
+2013;3;Steinburg – Dithmarschen Süd
+2013;4;Rendsburg-Eckernförde
+2013;5;Kiel
+2013;6;Plön – Neumünster
+2013;7;Pinneberg
+2013;8;Segeberg – Stormarn-Mitte
+2013;9;Ostholstein – Stormarn-Nord
+2013;10;Herzogtum Lauenburg – Stormarn-Süd
+2013;11;Lübeck
+2013;12;Schwerin – Ludwigslust-Parchim I – Nordwestmecklenburg I
+2013;13;Ludwigslust-Parchim II – Nordwestmecklenburg II – Landkreis Rostock I
+2013;14;Rostock – Landkreis Rostock II
+2013;15;Vorpommern-Rügen – Vorpommern-Greifswald I
+2013;16;Mecklenburgische Seenplatte I – Vorpommern-Greifswald II 
+2013;17;Mecklenburgische Seenplatte II – Landkreis Rostock III
+2013;18;Hamburg-Mitte
+2013;19;Hamburg-Altona
+2013;20;Hamburg-Eimsbüttel
+2013;21;Hamburg-Nord
+2013;22;Hamburg-Wandsbek
+2013;23;Hamburg-Bergedorf – Harburg
+2013;24;Aurich – Emden
+2013;25;Unterems
+2013;26;Friesland – Wilhelmshaven – Wittmund
+2013;27;Oldenburg – Ammerland
+2013;28;Delmenhorst – Wesermarsch – Oldenburg-Land
+2013;29;Cuxhaven – Stade II
+2013;30;Stade I – Rotenburg II
+2013;31;Mittelems
+2013;32;Cloppenburg – Vechta
+2013;33;Diepholz – Nienburg I
+2013;34;Osterholz – Verden
+2013;35;Rotenburg I – Heidekreis
+2013;36;Harburg
+2013;37;Lüchow-Dannenberg – Lüneburg
+2013;38;Osnabrück-Land
+2013;39;Stadt Osnabrück
+2013;40;Nienburg II – Schaumburg
+2013;41;Stadt Hannover I
+2013;42;Stadt Hannover II
+2013;43;Hannover-Land I
+2013;44;Celle – Uelzen
+2013;45;Gifhorn – Peine
+2013;46;Hameln-Pyrmont – Holzminden
+2013;47;Hannover-Land II
+2013;48;Hildesheim
+2013;49;Salzgitter – Wolfenbüttel
+2013;50;Braunschweig
+2013;51;Helmstedt – Wolfsburg
+2013;52;Goslar – Northeim – Osterode
+2013;53;Göttingen
+2013;54;Bremen I
+2013;55;Bremen II – Bremerhaven
+2013;56;Prignitz – Ostprignitz-Ruppin – Havelland I
+2013;57;Uckermark – Barnim I
+2013;58;Oberhavel – Havelland II
+2013;59;Märkisch-Oderland – Barnim II
+2013;60;Brandenburg an der Havel – Potsdam-Mittelmark I – Havelland III – Teltow-Fläming I
+2013;61;Potsdam – Potsdam-Mittelmark II – Teltow-Fläming II
+2013;62;Dahme-Spreewald – Teltow-Fläming III – Oberspreewald-Lausitz I
+2013;63;Frankfurt (Oder) – Oder-Spree
+2013;64;Cottbus – Spree-Neiße
+2013;65;Elbe-Elster – Oberspreewald-Lausitz II
+2013;66;Altmark
+2013;67;Börde – Jerichower Land
+2013;68;Harz
+2013;69;Magdeburg
+2013;70;Dessau – Wittenberg
+2013;71;Anhalt
+2013;72;Halle
+2013;73;Burgenland – Saalekreis
+2013;74;Mansfeld
+2013;75;Berlin-Mitte
+2013;76;Berlin-Pankow
+2013;77;Berlin-Reinickendorf
+2013;78;Berlin-Spandau – Charlottenburg Nord
+2013;79;Berlin-Steglitz-Zehlendorf
+2013;80;Berlin-Charlottenburg-Wilmersdorf
+2013;81;Berlin-Tempelhof-Schöneberg
+2013;82;Berlin-Neukölln
+2013;83;Berlin-Friedrichshain-Kreuzberg – Prenzlauer Berg Ost
+2013;84;Berlin-Treptow-Köpenick
+2013;85;Berlin-Marzahn-Hellersdorf
+2013;86;Berlin-Lichtenberg
+2013;87;Aachen I
+2013;88;Aachen II
+2013;89;Heinsberg
+2013;90;Düren
+2013;91;Rhein-Erft-Kreis I
+2013;92;Euskirchen – Rhein-Erft-Kreis II
+2013;93;Köln I
+2013;94;Köln II
+2013;95;Köln III
+2013;96;Bonn
+2013;97;Rhein-Sieg-Kreis I
+2013;98;Rhein-Sieg-Kreis II
+2013;99;Oberbergischer Kreis
+2013;100;Rheinisch-Bergischer Kreis
+2013;101;Leverkusen – Köln IV
+2013;102;Wuppertal I
+2013;103;Solingen – Remscheid – Wuppertal II
+2013;104;Mettmann I
+2013;105;Mettmann II
+2013;106;Düsseldorf I
+2013;107;Düsseldorf II
+2013;108;Neuss I
+2013;109;Mönchengladbach
+2013;110;Krefeld I – Neuss II
+2013;111;Viersen
+2013;112;Kleve
+2013;113;Wesel I
+2013;114;Krefeld II – Wesel II
+2013;115;Duisburg I
+2013;116;Duisburg II
+2013;117;Oberhausen – Wesel III
+2013;118;Mülheim – Essen I
+2013;119;Essen II
+2013;120;Essen III
+2013;121;Recklinghausen I
+2013;122;Recklinghausen II
+2013;123;Gelsenkirchen
+2013;124;Steinfurt I – Borken I
+2013;125;Bottrop – Recklinghausen III
+2013;126;Borken II
+2013;127;Coesfeld – Steinfurt II
+2013;128;Steinfurt III
+2013;129;Münster
+2013;130;Warendorf
+2013;131;Gütersloh I
+2013;132;Bielefeld – Gütersloh II
+2013;133;Herford – Minden-Lübbecke II
+2013;134;Minden-Lübbecke I
+2013;135;Lippe I
+2013;136;Höxter – Lippe II
+2013;137;Paderborn – Gütersloh III
+2013;138;Hagen – Ennepe-Ruhr-Kreis I
+2013;139;Ennepe-Ruhr-Kreis II
+2013;140;Bochum I
+2013;141;Herne – Bochum II
+2013;142;Dortmund I
+2013;143;Dortmund II
+2013;144;Unna I
+2013;145;Hamm – Unna II
+2013;146;Soest
+2013;147;Hochsauerlandkreis
+2013;148;Siegen-Wittgenstein
+2013;149;Olpe – Märkischer Kreis I
+2013;150;Märkischer Kreis II
+2013;151;Nordsachsen
+2013;152;Leipzig I
+2013;153;Leipzig II
+2013;154;Leipzig-Land
+2013;155;Meißen
+2013;156;Bautzen I
+2013;157;Görlitz
+2013;158;Sächsische Schweiz-Osterzgebirge
+2013;159;Dresden I
+2013;160;Dresden II – Bautzen II
+2013;161;Mittelsachsen
+2013;162;Chemnitz
+2013;163;Chemnitzer Umland – Erzgebirgskreis II
+2013;164;Erzgebirgskreis I
+2013;165;Zwickau
+2013;166;Vogtlandkreis
+2013;167;Waldeck
+2013;168;Kassel
+2013;169;Werra-Meißner – Hersfeld-Rotenburg
+2013;170;Schwalm-Eder
+2013;171;Marburg
+2013;172;Lahn-Dill
+2013;173;Gießen
+2013;174;Fulda
+2013;175;Main-Kinzig – Wetterau II – Schotten
+2013;176;Hochtaunus
+2013;177;Wetterau I
+2013;178;Rheingau-Taunus – Limburg
+2013;179;Wiesbaden
+2013;180;Hanau
+2013;181;Main-Taunus
+2013;182;Frankfurt am Main I
+2013;183;Frankfurt am Main II
+2013;184;Groß-Gerau
+2013;185;Offenbach
+2013;186;Darmstadt
+2013;187;Odenwald
+2013;188;Bergstraße
+2013;189;Eichsfeld – Nordhausen – Unstrut-Hainich-Kreis I
+2013;190;Eisenach – Wartburgkreis – Unstrut-Hainich-Kreis II
+2013;191;Kyffhäuserkreis – Sömmerda – Weimarer Land I
+2013;192;Gotha – Ilm-Kreis
+2013;193;Erfurt – Weimar – Weimarer Land II
+2013;194;Gera – Jena – Saale-Holzland-Kreis
+2013;195;Greiz – Altenburger Land
+2013;196;Sonneberg – Saalfeld-Rudolstadt – Saale-Orla-Kreis
+2013;197;Suhl – Schmalkalden-Meiningen – Hildburghausen
+2013;198;Neuwied
+2013;199;Ahrweiler
+2013;200;Koblenz
+2013;201;Mosel/Rhein-Hunsrück
+2013;202;Kreuznach
+2013;203;Bitburg
+2013;204;Trier
+2013;205;Montabaur
+2013;206;Mainz
+2013;207;Worms
+2013;208;Ludwigshafen/Frankenthal
+2013;209;Neustadt – Speyer
+2013;210;Kaiserslautern
+2013;211;Pirmasens
+2013;212;Südpfalz
+2013;213;Altötting
+2013;214;Erding – Ebersberg
+2013;215;Freising
+2013;216;Fürstenfeldbruck
+2013;217;Ingolstadt
+2013;218;München-Nord
+2013;219;München-Ost
+2013;220;München-Süd
+2013;221;München-West/Mitte
+2013;222;München-Land
+2013;223;Rosenheim
+2013;224;Starnberg
+2013;225;Traunstein
+2013;226;Weilheim
+2013;227;Deggendorf
+2013;228;Landshut
+2013;229;Passau
+2013;230;Rottal-Inn
+2013;231;Straubing
+2013;232;Amberg
+2013;233;Regensburg
+2013;234;Schwandorf
+2013;235;Weiden
+2013;236;Bamberg
+2013;237;Bayreuth
+2013;238;Coburg
+2013;239;Hof
+2013;240;Kulmbach
+2013;241;Ansbach
+2013;242;Erlangen
+2013;243;Fürth
+2013;244;Nürnberg-Nord
+2013;245;Nürnberg-Süd
+2013;246;Roth
+2013;247;Aschaffenburg
+2013;248;Bad Kissingen
+2013;249;Main-Spessart
+2013;250;Schweinfurt
+2013;251;Würzburg
+2013;252;Augsburg-Stadt
+2013;253;Augsburg-Land
+2013;254;Donau-Ries
+2013;255;Neu-Ulm
+2013;256;Oberallgäu
+2013;257;Ostallgäu
+2013;258;Stuttgart I
+2013;259;Stuttgart II
+2013;260;Böblingen
+2013;261;Esslingen
+2013;262;Nürtingen
+2013;263;Göppingen
+2013;264;Waiblingen
+2013;265;Ludwigsburg
+2013;266;Neckar-Zaber
+2013;267;Heilbronn
+2013;268;Schwäbisch Hall – Hohenlohe
+2013;269;Backnang – Schwäbisch Gmünd
+2013;270;Aalen – Heidenheim
+2013;271;Karlsruhe-Stadt
+2013;272;Karlsruhe-Land
+2013;273;Rastatt
+2013;274;Heidelberg
+2013;275;Mannheim
+2013;276;Odenwald – Tauber
+2013;277;Rhein-Neckar
+2013;278;Bruchsal – Schwetzingen
+2013;279;Pforzheim
+2013;280;Calw
+2013;281;Freiburg
+2013;282;Lörrach – Müllheim
+2013;283;Emmendingen – Lahr
+2013;284;Offenburg
+2013;285;Rottweil – Tuttlingen
+2013;286;Schwarzwald-Baar
+2013;287;Konstanz
+2013;288;Waldshut
+2013;289;Reutlingen
+2013;290;Tübingen
+2013;291;Ulm
+2013;292;Biberach
+2013;293;Bodensee
+2013;294;Ravensburg
+2013;295;Zollernalb – Sigmaringen
+2013;296;Saarbrücken
+2013;297;Saarlouis
+2013;298;St. Wendel
+2013;299;Homburg
