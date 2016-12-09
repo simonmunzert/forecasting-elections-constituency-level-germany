@@ -1,3 +1,4 @@
+
 # Forecasting Elections at the Constituency Level
 # Simon Munzert
 
@@ -12,7 +13,7 @@ source("packages.r")
 
 ## load historical and simulation data from projection model
 load("prepared_data/data_prep_model_projection.RData")
-load("bugs_simulations/proj_bugs_sim_wo_all.RData")
+load("bugs_simulations/proj_bugs_sim_inc_all.RData")
 
 # party-district-election specific deviation matrix
 n.sims <- nrow(proj_bugs_sim_dat_all)
@@ -180,7 +181,7 @@ set.seed(123)
 mu.polls.2013 <- sample_n(mu.polls.2013, size = 3000, replace = FALSE) # sample 3000 simulations to get equal number of simulations per forecast
 rm(proj_bugs_sim_dat_all)
 
-load("bugs_simulations/proj_bugs_sim_wo_all.RData")
+load("bugs_simulations/proj_bugs_sim_inc_all.RData")
 mu <-  dplyr::select(proj_bugs_sim_dat_all, starts_with("mu"))
 mu.proj.2013 <- mu[,year.2013.proj]
 set.seed(123)
@@ -317,7 +318,7 @@ table(winner.2013.pred.combined.equalweight)
 
 
 ## generate table: forecast reports ---------------------
-# table: nr, district name, projection winner, polls winner, combined winner
+# table: nr, district name, projection winner, polls winner, combined winner, winning probability
 
 # load district data
 wk.results <- read.dta("../data/constituencies/districts_1994_2013.dta")
@@ -461,6 +462,7 @@ wk.results.2013$winner.2013.comb.equalweight.uncorr <- replaceCSU(wk.results.201
 
 
 # export forecast table
+wk.results.2013$district.name <- wk.results.2013$district.name %>% str_replace_all("\\xe4", "a") %>% str_replace_all("\\xf6", "o") %>% str_replace("\\xfc", "u") %>% str_replace("\\x96", "") 
 district_str_length <- str_length(wk.results.2013$district.name)
 district_name_points <- ifelse(district_str_length > 20, "...", "")
 district_name_shortened <- paste0(str_sub(wk.results.2013$district.name, 1,20), district_name_points)
@@ -474,11 +476,12 @@ forecast.table <- data.frame(district.name = district_name_shortened,
                              fdp.pred.voteshare = wk.results.2013$fdp.2013.pred.combined,
                              gru.pred.voteshare = wk.results.2013$gru.2013.pred.combined,
                              lin.pred.voteshare = wk.results.2013$lin.2013.pred.combined)
+                            # prob.winning = wk.results.2013$prob.2013.pred.combined)
 
 
 forecast.table.latex.xtab <- xtable(forecast.table, digits=2)
 caption(forecast.table.latex.xtab) <- "Overview of 2013 forecasts"
-print(forecast.table.latex.xtab, hline.after = seq(5, 299, 5), type="latex",table.placement = "t!", caption.placement="top", file="../figures/forecast.table.tex")
+print(forecast.table.latex.xtab, hline.after = seq(5, 299, 5), type="latex",table.placement = "t!", caption.placement="top", file="../figures/forecast.table.inc.tex")
 
 
 
@@ -675,8 +678,8 @@ prop.table(table(wk.results.2013.marginal$winner.2013.true == wk.results.2013.ma
 
 spdf.area$wknr <- spdf.area$WKR_NR
 spdf.results <- spdf.area
-spdf.results$winner.2013.true <- wk.results.2013.df$winner.2013.true
-spdf.results$winner.2013.forecast <- wk.results.2013.df$forecast.winner.combined
+spdf.results$winner.2013.true <- wk.results.2013$winner.2013.true
+spdf.results$winner.2013.forecast <- wk.results.2013$forecast.winner.combined
 
 
 # plot map of districts covered, colors identify predicted winner
@@ -720,126 +723,126 @@ par(mar=c(2,2,2,2), lheight = .8)     # b, l, t, r
 par(oma=c(4,4,3,2))
 par(mfrow=c(3,5), pty = "s")
 ### 2013, projection forecast
-plot(wk.results.2013.df$cdsu1share, forecasts.projection.2013$cdsu.2013.proj, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7, main="", ylab="", xlab="", axes=F, cex.main=2)
+plot(wk.results.2013$cdsu1share, forecasts.projection.2013$cdsu.2013.proj, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7, main="", ylab="", xlab="", axes=F, cex.main=2)
 	axis(2, at = .35, label = "Uniform swing", las = 0, tick=F, outer=T, cex.axis=2, line=0)
 	axis(3, at = .35, label = "CDU/CSU", las = 0, tick=F, outer=T, cex.axis=2, line=-2)
-	abline(h = mean(wk.results.2013.df$cdsu1share, na.rm=T), lty = 2)
+	abline(h = mean(wk.results.2013$cdsu1share, na.rm=T), lty = 2)
 	abline(v = mean(forecasts.projection.2013$cdsu.2013.proj, na.rm=T), lty = 2)
 	abline(0,1)
 	axis(1, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	axis(2, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	box()
-plot(wk.results.2013.df$spd1share, forecasts.projection.2013$spd.2013.proj, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
+plot(wk.results.2013$spd1share, forecasts.projection.2013$spd.2013.proj, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
 	axis(3, at = .35, label = "SPD", las = 0, tick=F, outer=T, cex.axis=2, line=-2)
-	abline(h = mean(wk.results.2013.df$spd1share, na.rm=T), lty = 2)
+	abline(h = mean(wk.results.2013$spd1share, na.rm=T), lty = 2)
 	abline(v = mean(forecasts.projection.2013$spd.2013.proj, na.rm=T), lty = 2)
 	abline(0,1)
 	axis(1, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	axis(2, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	box()
-plot(wk.results.2013.df$fdp1share, forecasts.projection.2013$fdp.2013.proj, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
+plot(wk.results.2013$fdp1share, forecasts.projection.2013$fdp.2013.proj, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
 	axis(3, at = .35, label = "FDP", las = 0, tick=F, outer=T, cex.axis=2, line=-2)
-	abline(h = mean(wk.results.2013.df$fdp1share, na.rm=T), lty = 2)
+	abline(h = mean(wk.results.2013$fdp1share, na.rm=T), lty = 2)
 	abline(v = mean(forecasts.projection.2013$fdp.2013.proj, na.rm=T), lty = 2)
 	abline(0,1)
 	axis(1, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	axis(2, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	box()	
-plot(wk.results.2013.df$gru1share, forecasts.projection.2013$gru.2013.proj, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
+plot(wk.results.2013$gru1share, forecasts.projection.2013$gru.2013.proj, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
 	axis(3, at = .35, label = "B90/Die Gr?nen", las = 0, tick=F, outer=T, cex.axis=2, line=-2)
-	abline(h = mean(wk.results.2013.df$gru1share, na.rm=T), lty = 2)
+	abline(h = mean(wk.results.2013$gru1share, na.rm=T), lty = 2)
 	abline(v = mean(forecasts.projection.2013$gru.2013.proj, na.rm=T), lty = 2)
 	abline(0,1)
 	axis(1, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	axis(2, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	box()	
-plot(wk.results.2013.df$lin1share, forecasts.projection.2013$lin.2013.proj, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
+plot(wk.results.2013$lin1share, forecasts.projection.2013$lin.2013.proj, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
 	axis(3, at = .35, label = "Die Linke", las = 0, tick=F, outer=T, cex.axis=2, line=-2)
-	abline(h = mean(wk.results.2013.df$lin1share, na.rm=T), lty = 2)
+	abline(h = mean(wk.results.2013$lin1share, na.rm=T), lty = 2)
 	abline(v = mean(forecasts.projection.2013$lin.2013.proj, na.rm=T), lty = 2)
 	abline(0,1)
 	axis(1, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	axis(2, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	box()	
 ### 2013, polling forecast
-plot(wk.results.2013.df$cdsu1share, forecasts.poll.2013$cdsu.2013.poll, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7, main="", ylab="", xlab="", axes=F, cex.main=2)
+plot(wk.results.2013$cdsu1share, forecasts.poll.2013$cdsu.2013.poll, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7, main="", ylab="", xlab="", axes=F, cex.main=2)
 	axis(2, at = .35, label = "Polling", las = 0, tick=F, outer=T, cex.axis=2, line=0)
 	#axis(3, at = .35, label = "CDU/CSU", las = 0, tick=F, outer=T, cex.axis=2, line=-2)
-	abline(h = mean(wk.results.2013.df$cdsu1share, na.rm=T), lty = 2)
+	abline(h = mean(wk.results.2013$cdsu1share, na.rm=T), lty = 2)
 	abline(v = mean(forecasts.poll.2013$cdsu.2013.poll, na.rm=T), lty = 2)
 	abline(0,1)
 	axis(1, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	axis(2, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	box()
-plot(wk.results.2013.df$spd1share, forecasts.poll.2013$spd.2013.poll, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
+plot(wk.results.2013$spd1share, forecasts.poll.2013$spd.2013.poll, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
 	#axis(3, at = .35, label = "SPD", las = 0, tick=F, outer=T, cex.axis=2, line=-2)
-	abline(h = mean(wk.results.2013.df$spd1share, na.rm=T), lty = 2)
+	abline(h = mean(wk.results.2013$spd1share, na.rm=T), lty = 2)
 	abline(v = mean(forecasts.poll.2013$spd.2013.poll, na.rm=T), lty = 2)
 	abline(0,1)
 	axis(1, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	axis(2, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	box()
-plot(wk.results.2013.df$fdp1share, forecasts.poll.2013$fdp.2013.poll, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
+plot(wk.results.2013$fdp1share, forecasts.poll.2013$fdp.2013.poll, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
 	#axis(3, at = .35, label = "FDP", las = 0, tick=F, outer=T, cex.axis=2, line=-2)
-	abline(h = mean(wk.results.2013.df$fdp1share, na.rm=T), lty = 2)
+	abline(h = mean(wk.results.2013$fdp1share, na.rm=T), lty = 2)
 	abline(v = mean(forecasts.poll.2013$fdp.2013.poll, na.rm=T), lty = 2)
 	abline(0,1)
 	axis(1, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	axis(2, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	box()	
-plot(wk.results.2013.df$gru1share, forecasts.poll.2013$gru.2013.poll, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
+plot(wk.results.2013$gru1share, forecasts.poll.2013$gru.2013.poll, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
 	#axis(3, at = .35, label = "B90/Die Gr?nen", las = 0, tick=F, outer=T, cex.axis=2, line=-2)
-	abline(h = mean(wk.results.2013.df$gru1share, na.rm=T), lty = 2)
+	abline(h = mean(wk.results.2013$gru1share, na.rm=T), lty = 2)
 	abline(v = mean(forecasts.poll.2013$gru.2013.poll, na.rm=T), lty = 2)
 	abline(0,1)
 	axis(1, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	axis(2, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	box()	
-plot(wk.results.2013.df$lin1share, forecasts.poll.2013$lin.2013.poll, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
+plot(wk.results.2013$lin1share, forecasts.poll.2013$lin.2013.poll, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
 	#axis(3, at = .35, label = "Die Linke", las = 0, tick=F, outer=T, cex.axis=2, line=-2)
-	abline(h = mean(wk.results.2013.df$lin1share, na.rm=T), lty = 2)
+	abline(h = mean(wk.results.2013$lin1share, na.rm=T), lty = 2)
 	abline(v = mean(forecasts.poll.2013$lin.2013.poll, na.rm=T), lty = 2)
 	abline(0,1)
 	axis(1, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	axis(2, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	box()
 ### 2013, combined forecast
-plot(wk.results.2013.df$cdsu1share, forecast.combined.2013$forecast.combined.2013.cdsu, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7, main="", ylab="", xlab="", axes=F, cex.main=2)
+plot(wk.results.2013$cdsu1share, forecast.combined.2013$forecast.combined.2013.cdsu, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7, main="", ylab="", xlab="", axes=F, cex.main=2)
 	axis(2, at = .35, label = "Combined forecast", las = 0, tick=F, outer=T, cex.axis=2, line=0)
 	#axis(3, at = .35, label = "CDU/CSU", las = 0, tick=F, outer=T, cex.axis=2, line=-2)
-	abline(h = mean(wk.results.2013.df$cdsu1share, na.rm=T), lty = 2)
+	abline(h = mean(wk.results.2013$cdsu1share, na.rm=T), lty = 2)
 	abline(v = mean(forecast.combined.2013$forecast.combined.2013.cdsu, na.rm=T), lty = 2)
 	abline(0,1)
 	axis(1, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	axis(2, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	box()
-plot(wk.results.2013.df$spd1share, forecast.combined.2013$forecast.combined.2013.spd, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
+plot(wk.results.2013$spd1share, forecast.combined.2013$forecast.combined.2013.spd, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
 	#axis(3, at = .35, label = "SPD", las = 0, tick=F, outer=T, cex.axis=2, line=-2)
-	abline(h = mean(wk.results.2013.df$spd1share, na.rm=T), lty = 2)
+	abline(h = mean(wk.results.2013$spd1share, na.rm=T), lty = 2)
 	abline(v = mean(forecast.combined.2013$forecast.combined.2013.spd, na.rm=T), lty = 2)
 	abline(0,1)
 	axis(1, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	axis(2, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	box()
-plot(wk.results.2013.df$fdp1share, forecast.combined.2013$forecast.combined.2013.fdp, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
+plot(wk.results.2013$fdp1share, forecast.combined.2013$forecast.combined.2013.fdp, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
 	#axis(3, at = .35, label = "FDP", las = 0, tick=F, outer=T, cex.axis=2, line=-2)
-	abline(h = mean(wk.results.2013.df$fdp1share, na.rm=T), lty = 2)
+	abline(h = mean(wk.results.2013$fdp1share, na.rm=T), lty = 2)
 	abline(v = mean(forecast.combined.2013$forecast.combined.2013.fdp, na.rm=T), lty = 2)
 	abline(0,1)
 	axis(1, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	axis(2, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	box()	
-plot(wk.results.2013.df$gru1share, forecast.combined.2013$forecast.combined.2013.gru, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
+plot(wk.results.2013$gru1share, forecast.combined.2013$forecast.combined.2013.gru, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
 	#axis(3, at = .35, label = "B90/Die Gr?nen", las = 0, tick=F, outer=T, cex.axis=2, line=-2)
-	abline(h = mean(wk.results.2013.df$gru1share, na.rm=T), lty = 2)
+	abline(h = mean(wk.results.2013$gru1share, na.rm=T), lty = 2)
 	abline(v = mean(forecast.combined.2013$forecast.combined.2013.gru, na.rm=T), lty = 2)
 	abline(0,1)
 	axis(1, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	axis(2, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
 	box()	
-plot(wk.results.2013.df$lin1share, forecast.combined.2013$forecast.combined.2013.lin, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
+plot(wk.results.2013$lin1share, forecast.combined.2013$forecast.combined.2013.lin, ylim=c(0,.7), xlim=c(0,.7), lty=1, lwd=.5, col=rgb(.1,.1,.1,alpha=.5,max=1), pch=16, cex=.7,  main="", ylab="", xlab="", axes=F, cex.main=2)
 	#axis(3, at = .35, label = "Die Linke", las = 0, tick=F, outer=T, cex.axis=2, line=-2)
-	abline(h = mean(wk.results.2013.df$lin1share, na.rm=T), lty = 2)
+	abline(h = mean(wk.results.2013$lin1share, na.rm=T), lty = 2)
 	abline(v = mean(forecast.combined.2013$forecast.combined.2013.lin, na.rm=T), lty = 2)
 	abline(0,1)
 	axis(1, at=c(0,.2,.4,.6), labels=T, cex.axis=1.2)
@@ -853,28 +856,28 @@ dev.off()
 ## inspect forecast errors -----------------------------
 
 # identify falsely predicted districts
-wk.results.2013.df$forecast.failure <- ifelse(wk.results.2013.df$winner.2013.true != wk.results.2013.df$forecast.winner.combined, 1, 0)
-wk.results.2013.df$district.name[wk.results.2013.df$winner.2013.true != wk.results.2013.df$forecast.winner.combined]
-wk.results.2013.df$winner.2013.true[wk.results.2013.df$winner.2013.true != wk.results.2013.df$forecast.winner.combined]
+wk.results.2013$forecast.failure <- ifelse(wk.results.2013$winner.2013.true != wk.results.2013$winner.2013.pred.combined, 1, 0)
+wk.results.2013$district.name[wk.results.2013$winner.2013.true != wk.results.2013$winner.2013.pred.combined]
+wk.results.2013$winner.2013.true[wk.results.2013$winner.2013.true != wk.results.2013$winner.2013.pred.combined]
 
-vote1shares <- cbind(wk.results.2013.df$cdsu1share,wk.results.2013.df$spd1share,wk.results.2013.df$fdp1share,wk.results.2013.df$gru1share,wk.results.2013.df$lin1share)
-wk.results.2013.df$winner.share <- apply(vote1shares, 1, max)
-wk.results.2013.df$second.share <- apply(vote1shares, 1, function(x) {sort(x,partial=4)[4] })
-wk.results.2013.df$winning.margin <- wk.results.2013.df$winner.share - wk.results.2013.df$second.share
-summary(wk.results.2013.df$winning.margin)
+vote1shares <- cbind(wk.results.2013$cdsu1share,wk.results.2013$spd1share,wk.results.2013$fdp1share,wk.results.2013$gru1share,wk.results.2013$lin1share)
+wk.results.2013$winner.share <- apply(vote1shares, 1, max)
+wk.results.2013$second.share <- apply(vote1shares, 1, function(x) {sort(x,partial=4)[4] })
+wk.results.2013$winning.margin <- wk.results.2013$winner.share - wk.results.2013$second.share
+summary(wk.results.2013$winning.margin)
 
 # generate table of forecast failures
-failures.df <- wk.results.2013.df[wk.results.2013.df$forecast.failure==1,]
+failures.df <- wk.results.2013[wk.results.2013$forecast.failure==1,]
 
-failures.table <- data.frame(wknr=failures.df$wknr,district.name=str_sub(failures.df$district.name,1,20),fc.poll=failures.df$forecast.winner.poll,fc.proj=failures.df$forecast.winner.projection,fc.combined=failures.df$forecast.winner.combined,winner=failures.df$winner.2013.true, margin=failures.df$winning.margin)
+failures.table <- data.frame(wknr=failures.df$wknr,district.name=str_sub(failures.df$district.name,1,20),fc.poll=failures.df$winner.2013.pred.polls,fc.proj=failures.df$winner.2013.pred.proj,fc.combined=failures.df$winner.2013.pred.combined,winner=failures.df$winner.2013.true, margin=failures.df$winning.margin)
 failures.table <- failures.table[order(failures.table$margin),]
 rownames(failures.table) <- NULL
 
 failures.table.latex.xtab <- xtable(failures.table, digits=3)
 caption(failures.table.latex.xtab) <- "Failed forecasts"
-print(failures.table.latex.xtab, type="latex",table.placement = "t!", caption.placement="top", file="../figures/failures.table.tex")
+print(failures.table.latex.xtab, type="latex",table.placement = "t!", caption.placement="top", file="../figures/failures.inc.table.tex")
 
-forecasts.2013.df <- cbind(forecast.combined.2013, wk.results.2013.df)
+forecasts.2013.df <- cbind(forecast.combined.2013, wk.results.2013)
 write.dta(forecasts.2013.df, "forecasts_ger_2013.dta", version = 9)
 
 

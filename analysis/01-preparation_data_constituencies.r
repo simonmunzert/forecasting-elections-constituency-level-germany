@@ -146,8 +146,76 @@ districts.df$lin2share.2009 <- districts.df$pds2.2009 / districts.df$waehler.200
 # correct string format in variable wkr_nr1998
 districts.df$wkr_nr1998 <- as.numeric(districts.df$wkr_nr1998)
 
+
+# append incumbency information from Kurella/Pappi/Bräuninger
+incumbency.dat <- read.dta("../data/Constituencies/Wahlkreispanel_ab1990.dta", convert.factors = FALSE)
+incumbency.dat.sub <- select(incumbency.dat, wkr_nummer, year, ends_with("_inc"), ends_with("_u"))
+
+# prepare 1994 data
+incumbency.dat.sub.1994 <- filter(incumbency.dat.sub, year == 1994) %>% rename(cdsu_inc_1994 = cdu_k_inc, spd_inc_1994 = spd_k_inc, fdp_inc_1994 = fdp_k_inc, gru_inc_1994 = gru_k_inc, lin_inc_1994 = pds_k_inc,
+                                                                               cdsu_inc_u_1994 = cdu_k_inc_u, spd_inc_u_1994 = spd_k_inc_u, fdp_inc_u_1994 = fdp_k_inc_u, gru_inc_u_1994 = gru_k_inc_u, lin_inc_u_1994 = pds_k_inc_u)
+incumbency.dat.sub.1994$cdsu_inc_1994[is.na(incumbency.dat.sub.1994$cdsu_inc_1994)] <- incumbency.dat.sub.1994$csu_k_inc[is.na(incumbency.dat.sub.1994$cdsu_inc_1994)]
+incumbency.dat.sub.1994$csu_k_inc <- NULL
+incumbency.dat.sub.1994$year <- NULL
+incumbency.dat.sub.1994 <- transmute(incumbency.dat.sub.1994, wkr_nummer = wkr_nummer, cdsu_inc_1994 = cdsu_inc_1994 + cdsu_inc_u_1994, spd_inc_1994 = spd_inc_1994 + spd_inc_u_1994, fdp_inc_1994 = fdp_inc_1994 + fdp_inc_u_1994, gru_inc_1994 = gru_inc_1994 + gru_inc_u_1994, lin_inc_1994 = lin_inc_1994 + lin_inc_u_1994)
+incumbency.dat.sub.1994[is.na(incumbency.dat.sub.1994)] <- 0
+
+# prepare 1998 data
+incumbency.dat.sub.1998 <- filter(incumbency.dat.sub, year == 1998) %>% rename(cdsu_inc_1998 = cdu_k_inc, spd_inc_1998 = spd_k_inc, fdp_inc_1998 = fdp_k_inc, gru_inc_1998 = gru_k_inc, lin_inc_1998 = pds_k_inc,
+                                                                               cdsu_inc_u_1998 = cdu_k_inc_u, spd_inc_u_1998 = spd_k_inc_u, fdp_inc_u_1998 = fdp_k_inc_u, gru_inc_u_1998 = gru_k_inc_u, lin_inc_u_1998 = pds_k_inc_u)
+incumbency.dat.sub.1998$cdsu_inc_1998[is.na(incumbency.dat.sub.1998$cdsu_inc_1998)] <- incumbency.dat.sub.1998$csu_k_inc[is.na(incumbency.dat.sub.1998$cdsu_inc_1998)]
+incumbency.dat.sub.1998$csu_k_inc <- NULL
+incumbency.dat.sub.1998$year <- NULL
+incumbency.dat.sub.1998 <- transmute(incumbency.dat.sub.1998, wkr_nummer = wkr_nummer, cdsu_inc_1998 = cdsu_inc_1998 + cdsu_inc_u_1998, spd_inc_1998 = spd_inc_1998 + spd_inc_u_1998, fdp_inc_1998 = fdp_inc_1998 + fdp_inc_u_1998, gru_inc_1998 = gru_inc_1998 + gru_inc_u_1998, lin_inc_1998 = lin_inc_1998 + lin_inc_u_1998)
+incumbency.dat.sub.1998[is.na(incumbency.dat.sub.1998)] <- 0
+
+# prepare 2002 data
+incumbency.dat.sub.2002 <- filter(incumbency.dat.sub, year == 2002) %>% rename(cdsu_inc_2002 = cdu_k_inc, spd_inc_2002 = spd_k_inc, fdp_inc_2002 = fdp_k_inc, gru_inc_2002 = gru_k_inc, lin_inc_2002 = pds_k_inc,
+                                                                               cdsu_inc_u_2002 = cdu_k_inc_u, spd_inc_u_2002 = spd_k_inc_u, fdp_inc_u_2002 = fdp_k_inc_u, gru_inc_u_2002 = gru_k_inc_u, lin_inc_u_2002 = pds_k_inc_u)
+incumbency.dat.sub.2002$cdsu_inc_2002[is.na(incumbency.dat.sub.2002$cdsu_inc_2002)] <- incumbency.dat.sub.2002$csu_k_inc[is.na(incumbency.dat.sub.2002$cdsu_inc_2002)]
+incumbency.dat.sub.2002$csu_k_inc <- NULL
+incumbency.dat.sub.2002$year <- NULL
+incumbency.dat.sub.2002 <- transmute(incumbency.dat.sub.2002, wkr_nummer = wkr_nummer, cdsu_inc_2002 = cdsu_inc_2002 + cdsu_inc_u_2002, spd_inc_2002 = spd_inc_2002 + spd_inc_u_2002, fdp_inc_2002 = fdp_inc_2002 + fdp_inc_u_2002, gru_inc_2002 = gru_inc_2002 + gru_inc_u_2002, lin_inc_2002 = lin_inc_2002 + lin_inc_u_2002)
+incumbency.dat.sub.2002[is.na(incumbency.dat.sub.2002)] <- 0
+
+# prepare 2005 data
+incumbency.dat.sub.2005 <- filter(incumbency.dat.sub, year == 2005) %>% rename(cdsu_inc_2005 = cdu_k_inc, spd_inc_2005 = spd_k_inc, fdp_inc_2005 = fdp_k_inc, gru_inc_2005 = gru_k_inc, lin_inc_2005 = pds_k_inc,
+                                                                               cdsu_inc_u_2005 = cdu_k_inc_u, spd_inc_u_2005 = spd_k_inc_u, fdp_inc_u_2005 = fdp_k_inc_u, gru_inc_u_2005 = gru_k_inc_u, lin_inc_u_2005 = pds_k_inc_u)
+incumbency.dat.sub.2005$cdsu_inc_2005[is.na(incumbency.dat.sub.2005$cdsu_inc_2005)] <- incumbency.dat.sub.2005$csu_k_inc[is.na(incumbency.dat.sub.2005$cdsu_inc_2005)]
+incumbency.dat.sub.2005$csu_k_inc <- NULL
+incumbency.dat.sub.2005$year <- NULL
+incumbency.dat.sub.2005 <- transmute(incumbency.dat.sub.2005, wkr_nummer = wkr_nummer, cdsu_inc_2005 = cdsu_inc_2005 + cdsu_inc_u_2005, spd_inc_2005 = spd_inc_2005 + spd_inc_u_2005, fdp_inc_2005 = fdp_inc_2005 + fdp_inc_u_2005, gru_inc_2005 = gru_inc_2005 + gru_inc_u_2005, lin_inc_2005 = lin_inc_2005 + lin_inc_u_2005)
+incumbency.dat.sub.2005[is.na(incumbency.dat.sub.2005)] <- 0
+
+# prepare 2009 data
+incumbency.dat.sub.2009 <- filter(incumbency.dat.sub, year == 2009) %>% rename(cdsu_inc_2009 = cdu_k_inc, spd_inc_2009 = spd_k_inc, fdp_inc_2009 = fdp_k_inc, gru_inc_2009 = gru_k_inc, lin_inc_2009 = pds_k_inc,
+                                                                               cdsu_inc_u_2009 = cdu_k_inc_u, spd_inc_u_2009 = spd_k_inc_u, fdp_inc_u_2009 = fdp_k_inc_u, gru_inc_u_2009 = gru_k_inc_u, lin_inc_u_2009 = pds_k_inc_u)
+incumbency.dat.sub.2009$cdsu_inc_2009[is.na(incumbency.dat.sub.2009$cdsu_inc_2009)] <- incumbency.dat.sub.2009$csu_k_inc[is.na(incumbency.dat.sub.2009$cdsu_inc_2009)]
+incumbency.dat.sub.2009$csu_k_inc <- NULL
+incumbency.dat.sub.2009$year <- NULL
+incumbency.dat.sub.2009 <- transmute(incumbency.dat.sub.2009, wkr_nummer = wkr_nummer, cdsu_inc_2009 = cdsu_inc_2009 + cdsu_inc_u_2009, spd_inc_2009 = spd_inc_2009 + spd_inc_u_2009, fdp_inc_2009 = fdp_inc_2009 + fdp_inc_u_2009, gru_inc_2009 = gru_inc_2009 + gru_inc_u_2009, lin_inc_2009 = lin_inc_2009 + lin_inc_u_2009)
+incumbency.dat.sub.2009[is.na(incumbency.dat.sub.2009)] <- 0
+
+# prepare 2013 data
+incumbency.dat.sub.2013 <- filter(incumbency.dat.sub, year == 2013) %>% rename(cdsu_inc_2013 = cdu_k_inc, spd_inc_2013 = spd_k_inc, fdp_inc_2013 = fdp_k_inc, gru_inc_2013 = gru_k_inc, lin_inc_2013 = pds_k_inc,
+                                                                               cdsu_inc_u_2013 = cdu_k_inc_u, spd_inc_u_2013 = spd_k_inc_u, fdp_inc_u_2013 = fdp_k_inc_u, gru_inc_u_2013 = gru_k_inc_u, lin_inc_u_2013 = pds_k_inc_u)
+incumbency.dat.sub.2013$cdsu_inc_2013[is.na(incumbency.dat.sub.2013$cdsu_inc_2013)] <- incumbency.dat.sub.2013$csu_k_inc[is.na(incumbency.dat.sub.2013$cdsu_inc_2013)]
+incumbency.dat.sub.2013$csu_k_inc <- NULL
+incumbency.dat.sub.2013$year <- NULL
+incumbency.dat.sub.2013 <- transmute(incumbency.dat.sub.2013, wkr_nummer = wkr_nummer, cdsu_inc_2013 = cdsu_inc_2013 + cdsu_inc_u_2013, spd_inc_2013 = spd_inc_2013 + spd_inc_u_2013, fdp_inc_2013 = fdp_inc_2013 + fdp_inc_u_2013, gru_inc_2013 = gru_inc_2013 + gru_inc_u_2013, lin_inc_2013 = lin_inc_2013 + lin_inc_u_2013)
+incumbency.dat.sub.2013[is.na(incumbency.dat.sub.2013)] <- 0
+
+# merge data
+districts.df.merge <- merge(districts.df, incumbency.dat.sub.1994, by.x = "wkr_nr1994", by.y = "wkr_nummer", all.x = TRUE)
+districts.df.merge <- merge(districts.df.merge, incumbency.dat.sub.1998, by.x = "wkr_nr1998", by.y = "wkr_nummer", all.x = TRUE)
+districts.df.merge <- merge(districts.df.merge, incumbency.dat.sub.2002, by.x = "wkr_nr2002", by.y = "wkr_nummer", all.x = TRUE)
+districts.df.merge <- merge(districts.df.merge, incumbency.dat.sub.2005, by.x = "wkr_nr2005", by.y = "wkr_nummer", all.x = TRUE)
+districts.df.merge <- merge(districts.df.merge, incumbency.dat.sub.2009, by.x = "wkr_nr2009", by.y = "wkr_nummer", all.x = TRUE)
+districts.df.merge <- merge(districts.df.merge, incumbency.dat.sub.2013, by.x = "wkr_nr2013", by.y = "wkr_nummer", all.x = TRUE)
+
+
 # save data
-write.dta(districts.df, "prepared_data/data_districts_1994_2013.dta", convert.factors = "string", version=10)
+write.dta(districts.df.merge, "prepared_data/data_districts_1994_2013.dta", convert.factors = "string", version=10)
 
 
 

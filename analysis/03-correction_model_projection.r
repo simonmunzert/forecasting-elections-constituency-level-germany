@@ -1,6 +1,8 @@
 # Forecasting Elections at the Constituency Level
 # Simon Munzert
 
+## preparations -----------------------------------
+
 
 # load packages
 source("packages.r")
@@ -13,7 +15,7 @@ load("prepared_data/data_prep_model_projection.RData")
 
 ## set first share variable empty for leave-one-out estimation
 table(wk.results.melt$year)
-wk.results.melt$firstshare[wk.results.melt$year == 1994] <- NA # repeat process for all elections until 2009
+wk.results.melt$firstshare[wk.results.melt$year == 2009] <- NA # repeat process for all elections until 2009
 
 
 ## set up Bayesian model
@@ -23,6 +25,7 @@ y <- wk.results.melt$firstshare
 project <- wk.results.melt$project
 dominance <- wk.results.melt$dominance
 newrun <- wk.results.melt$newrun
+incumbent <- wk.results.melt$incumbent
 party <- as.numeric(as.factor(wk.results.melt$party))
 partyXwkr <- as.numeric(as.factor(wk.results.melt$partyXwkr))
 N <- nrow(wk.results.melt)
@@ -40,6 +43,7 @@ proj_bugs <- function(){
               b.project[party[i]]*project[i] + 
               b.dominance[party[i]]*dominance[i] + 
               b.newrun[party[i]]*newrun[i] + 
+              b.incumbent[party[i]]*incumbent[i] + 
               u[partyXwkr[i]]
   }
   
@@ -49,10 +53,12 @@ proj_bugs <- function(){
   b.project[j] ~ dnorm(b.project.hat[j], tau.b.project)
   b.dominance[j] ~ dnorm(b.dominance.hat[j], tau.b.dominance)
   b.newrun[j] ~ dnorm(b.newrun.hat[j], tau.b.newrun)
+  b.incumbent[j] ~ dnorm(b.incumbent.hat[j], tau.b.incumbent)
   alpha.hat[j] <- mu.alpha
   b.project.hat[j] <- mu.b.project
   b.dominance.hat[j] <- mu.b.dominance
   b.newrun.hat[j] <- mu.b.newrun
+  b.incumbent.hat[j] <- mu.b.incumbent
   tau.y[j] <- pow(sigma.y[j], -2)
   sigma.y[j] ~ dunif(0, 100) # prior
   }
@@ -66,35 +72,47 @@ proj_bugs <- function(){
   mu.b.project ~ dnorm(0, .0001)
   mu.b.dominance ~ dnorm(0, .0001)
   mu.b.newrun ~ dnorm(0, .0001)
+  mu.b.incumbent ~ dnorm(0, .0001)
   tau.alpha <- pow(sigma.alpha, -2)
   tau.b.project <- pow(sigma.b.project, -2)
   tau.b.dominance <- pow(sigma.b.dominance, -2)
   tau.b.newrun <- pow(sigma.b.newrun, -2) 
+  tau.b.incumbent <- pow(sigma.b.incumbent, -2) 
   tau.u <- pow(sigma.u, -2)
   sigma.alpha ~ dunif(0, 100)
   sigma.b.project ~ dunif(0, 100)
   sigma.b.dominance ~ dunif(0, 100)
   sigma.b.newrun ~ dunif(0, 100)
+  sigma.b.incumbent ~ dunif(0, 100)
   sigma.u ~ dunif(0,100)  
 }
   
-write.model(proj_bugs, "C:/WinBUGS14/Models/ger_projection_bugs.txt")
+write.model(proj_bugs, "bugs_simulations/ger_projection_incumbent_bugs.txt")
+
 
 # prepare data
-proj_bugs_data <- list("y","project","dominance","newrun","party","partyXwkr","N","J","K")
-proj_bugs <- "C:/WinBUGS14/Models/ger_projection_bugs.txt"
+proj_bugs_data <- list("y","project","dominance","newrun","incumbent","party","partyXwkr","N","J","K")
+proj_bugs <- "bugs_simulations/ger_projection_incumbent_bugs.txt"
+proj_bugs <- "/Users/simon/winbugs/ger_projection_incumbent_bugs.txt" # use path without spaces
 
 # set inits
 set.seed(123)
-proj_bugs_inits <- function(){list(alpha=rnorm(J, mean = 0, sd = 0.01), b.project=rnorm(J,1), b.dominance=rnorm(J,1), b.newrun=rnorm(J,1), u=rnorm(K, mean = 0, sd = 0.01), sigma.y=runif(J,0,1), sigma.alpha=runif(1,0,1), sigma.b.project=runif(1,0,1), sigma.b.dominance=runif(1,0,1), sigma.b.newrun=runif(1,0,1), sigma.u=runif(1,0,1))}
+proj_bugs_inits <- function(){list(alpha=rnorm(J, mean = 0, sd = 0.01), b.project=rnorm(J,1), b.dominance=rnorm(J,1), b.newrun=rnorm(J,1), b.incumbent=rnorm(J,1),u=rnorm(K, mean = 0, sd = 0.01), sigma.y=runif(J,0,1), sigma.alpha=runif(1,0,1), sigma.b.project=runif(1,0,1), sigma.b.dominance=runif(1,0,1), sigma.b.newrun=runif(1,0,1), sigma.b.incumbent=runif(1,0,1),sigma.u=runif(1,0,1))}
 
 # Run MCMC
-proj_bugs_sim <- bugs(data=proj_bugs_data, inits=proj_bugs_inits, model.file=proj_bugs, parameters.to.save=c("alpha", "b.project", "b.dominance", "b.newrun", "u", "sigma.y", "sigma.alpha", "sigma.b.project", "sigma.b.dominance", "sigma.b.newrun", "sigma.u", "mu"), n.chains=3, n.iter=10000, n.burnin=9000, n.thin=1, bugs.directory="C:/WinBUGS14", debug=T) 
+proj_bugs_sim <- bugs(data=proj_bugs_data, inits=proj_bugs_inits, model.file=proj_bugs, parameters.to.save=c("alpha", "b.project", "b.dominance", "b.newrun", "b.incumbent", "u", "sigma.y", "sigma.alpha", "sigma.b.project", "sigma.b.dominance", "sigma.b.newrun", "sigma.b.incumbent", "sigma.u", "mu"), n.chains=3, n.iter=10000, n.burnin=9000, n.thin=1,
+                      bugs.directory="/Users/simon/.wine/drive_c/Program Files/WinBUGS14/",
+                      useWINE = TRUE,
+                      WINE="/opt/local/bin/wine",  # WINE="/Applications/Darwine/Wine.bundle/Contents/bin/wine", 
+                      WINEPATH="/opt/local/bin/winepath", # WINEPATH="/Applications/Darwine/Wine.bundle/Contents/bin/winepath",
+                      debug=F) 
 
 plot(proj_bugs_sim)
 print(proj_bugs_sim, digits=2)
+save(proj_bugs_sim, file = "bugs_simulations/proj_bugs_sim_inc_2009.RData")
 
-save(proj_bugs_sim, file = "bugs_simulations/proj_bugs_sim_wo1994.RData")
+
+
 
 
 
@@ -123,6 +141,11 @@ proj_bugs_sim_dat <- data.frame(alpha_1 = alpha[,1],
                                 b.newrun_3 = b.newrun[,3],
                                 b.newrun_4 = b.newrun[,4],
                                 b.newrun_5 = b.newrun[,5], 
+                                b.incumbent_1 = b.incumbent[,1], 
+                                b.incumbent_2 = b.incumbent[,2],
+                                b.incumbent_3 = b.incumbent[,3],
+                                b.incumbent_4 = b.incumbent[,4],
+                                b.incumbent_5 = b.incumbent[,5], 
                                 sigma.u = sigma.u,
                                 sigma.y_1 = sigma.y[,1],
                                 sigma.y_2 = sigma.y[,2],
@@ -136,20 +159,20 @@ return(proj_bugs_sim_dat)
 
 # create combined data frame from simulations
 
-load("bugs_simulations/proj_bugs_sim_wo1994.RData")
-proj_bugs_sim_dat_wo1994 <- bugsSimDat(proj_bugs_sim)
-load("bugs_simulations/proj_bugs_sim_wo1998.RData")
-proj_bugs_sim_dat_wo1998 <- bugsSimDat(proj_bugs_sim)
-load("bugs_simulations/proj_bugs_sim_wo2002.RData")
-proj_bugs_sim_dat_wo2002 <- bugsSimDat(proj_bugs_sim)
-load("bugs_simulations/proj_bugs_sim_wo2005.RData")
-proj_bugs_sim_dat_wo2005 <- bugsSimDat(proj_bugs_sim)
-load("bugs_simulations/proj_bugs_sim_wo2009.RData")
-proj_bugs_sim_dat_wo2009 <- bugsSimDat(proj_bugs_sim)
+load("bugs_simulations/proj_bugs_sim_inc_1994.RData")
+proj_bugs_sim_dat_inc_1994 <- bugsSimDat(proj_bugs_sim)
+load("bugs_simulations/proj_bugs_sim_inc_1998.RData")
+proj_bugs_sim_dat_inc_1998 <- bugsSimDat(proj_bugs_sim)
+load("bugs_simulations/proj_bugs_sim_inc_2002.RData")
+proj_bugs_sim_dat_inc_2002 <- bugsSimDat(proj_bugs_sim)
+load("bugs_simulations/proj_bugs_sim_inc_2005.RData")
+proj_bugs_sim_dat_inc_2005 <- bugsSimDat(proj_bugs_sim)
+load("bugs_simulations/proj_bugs_sim_inc_2009.RData")
+proj_bugs_sim_dat_inc_2009 <- bugsSimDat(proj_bugs_sim)
 
-proj_bugs_sim_dat_all <- Reduce(function(...) merge(..., all = TRUE), list(proj_bugs_sim_dat_wo1994, proj_bugs_sim_dat_wo1998, proj_bugs_sim_dat_wo2002, proj_bugs_sim_dat_wo2005, proj_bugs_sim_dat_wo2009))
+proj_bugs_sim_dat_all <- Reduce(function(...) merge(..., all = TRUE), list(proj_bugs_sim_dat_inc_1994, proj_bugs_sim_dat_inc_1998, proj_bugs_sim_dat_inc_2002, proj_bugs_sim_dat_inc_2005, proj_bugs_sim_dat_inc_2009))
 
-save(proj_bugs_sim_dat_all, file = "bugs_simulations/proj_bugs_sim_wo_all.RData")
+save(proj_bugs_sim_dat_all, file = "bugs_simulations/proj_bugs_sim_inc_all.RData")
 
 
 
@@ -188,6 +211,12 @@ b.newrunFDP <- bayesEst(proj_bugs_sim_dat_all$b.newrun_2, .95, 3)
 b.newrunGRU <- bayesEst(proj_bugs_sim_dat_all$b.newrun_3, .95, 3)
 b.newrunLIN <- bayesEst(proj_bugs_sim_dat_all$b.newrun_4, .95, 3)
 
+b.incumbentCDSU <- bayesEst(proj_bugs_sim_dat_all$b.incumbent_1, .95, 3)
+b.incumbentSPD <- bayesEst(proj_bugs_sim_dat_all$b.incumbent_5, .95, 3)
+b.incumbentFDP <- bayesEst(proj_bugs_sim_dat_all$b.incumbent_2, .95, 3)
+b.incumbentGRU <- bayesEst(proj_bugs_sim_dat_all$b.incumbent_3, .95, 3)
+b.incumbentLIN <- bayesEst(proj_bugs_sim_dat_all$b.incumbent_4, .95, 3)
+
 sigma.u.est <- bayesEst(proj_bugs_sim_dat_all$sigma.u, .95, 3)
 sigma.y.CDSU.est <- bayesEst(proj_bugs_sim_dat_all$sigma.y_1, .95, 3)
 sigma.y.SPD.est <- bayesEst(proj_bugs_sim_dat_all$sigma.y_5, .95, 3)
@@ -197,7 +226,7 @@ sigma.y.LIN.est <- bayesEst(proj_bugs_sim_dat_all$sigma.y_4, .95, 3)
 
 # for documentation: retrieve model estimates
 N <- nrow(wk.results.melt)
-model.table <-  as.data.frame(matrix(NA,nrow=32,ncol=3))
+model.table <-  as.data.frame(matrix(NA,nrow=38,ncol=3))
 colnames(model.table) <- c("Variable name", "Estimate", "95\\% CI")
 model.table[,1] <- c(
   'Intercept $\\alpha$',
@@ -219,6 +248,12 @@ model.table[,1] <- c(
   '---B90/Die Gr\\"unen',
   '---Die Linke',
   'Pioneer  $\\beta^\\text{pio}$',
+  '---CDU/CSU',
+  '---SPD',
+  '---FDP',
+  '---B90/Die Gr\\"unen',
+  '---Die Linke',
+  'Incumbent  $\\beta^\\text{inc}$',
   '---CDU/CSU',
   '---SPD',
   '---FDP',
@@ -256,21 +291,29 @@ model.table[22,2:3] <- b.newrunFDP
 model.table[23,2:3] <- b.newrunGRU
 model.table[24,2:3] <- b.newrunLIN
 
-model.table[25,2:3] <- sigma.u.est
-model.table[27,2:3] <- sigma.y.CDSU.est
-model.table[28,2:3] <- sigma.y.SPD.est
-model.table[29,2:3] <- sigma.y.FDP.est
-model.table[30,2:3] <- sigma.y.GRU.est
-model.table[31,2:3] <- sigma.y.LIN.est
-model.table[32,2] <- N
+model.table[26,2:3] <- b.incumbentCDSU
+model.table[27,2:3] <- b.incumbentSPD
+model.table[28,2:3] <- b.incumbentFDP
+model.table[29,2:3] <- b.incumbentGRU
+model.table[30,2:3] <- b.incumbentLIN
+
+model.table[31,2:3] <- sigma.u.est
+model.table[33,2:3] <- sigma.y.CDSU.est
+model.table[34,2:3] <- sigma.y.SPD.est
+model.table[35,2:3] <- sigma.y.FDP.est
+model.table[36,2:3] <- sigma.y.GRU.est
+model.table[37,2:3] <- sigma.y.LIN.est
+model.table[38,2] <- N
 
 table.latex.xtab <- xtable(model.table, digits=3)
 caption(table.latex.xtab) <- "Bayesian estimates of the model of party first vote shares, based on projection model"
-print(table.latex.xtab, type="latex", sanitize.text.function=function(x){x}, table.placement = "t!", include.rownames = FALSE, caption.placement="top", file="../figures/table.data.projection.model.bayesian.tex")
+print(table.latex.xtab, type="latex", sanitize.text.function=function(x){x}, table.placement = "t!", include.rownames = FALSE, caption.placement="top", file="../figures/table.data.projection.model.inc.bayesian.tex")
 
 
 
 ## evaluate corrected predictions ------------------
+load("prepared_data/data_prep_model_projection.RData")
+
 
 # select corrected prediction variables
 proj_bugs_sim_dat_all_mu <- dplyr::select(proj_bugs_sim_dat_all, starts_with("mu"))
@@ -364,7 +407,7 @@ benchmark.table <- rbind(benchmark.table.mae, benchmark.table.mae.corr.highlight
 
 table.latex.xtab <- xtable(benchmark.table, digits=3)
 caption(table.latex.xtab) <- "Benchmark results for the projection forecasting model, uncorrected and corrected forecasts"
-print(table.latex.xtab, sanitize.text.function=function(x){x}, type="latex",table.placement = "t!", caption.placement="top", file="../figures/table.data.benchmarks.projection.tex")
+print(table.latex.xtab, sanitize.text.function=function(x){x}, type="latex",table.placement = "t!", caption.placement="top", file="../figures/table.data.benchmarks.projection.inc.tex")
 
 
 
@@ -373,7 +416,7 @@ print(table.latex.xtab, sanitize.text.function=function(x){x}, type="latex",tabl
 # predicted vs. true plot ---------------------------------------
 
 pvtProjectionPlot <- function(yr) {
-pdf(file=paste0("../figures/pvt_projection_", yr, ".pdf"), height=5, width=12, family="URWTimes")
+pdf(file=paste0("../figures/pvt_projection_inc_", yr, ".pdf"), height=5, width=12, family="URWTimes")
 par(mar=c(2,2,2,2), lheight = .8)     # b, l, t, r
 par(oma=c(4,4,3,2))
 par(mfrow=c(2,5), pty = "s")

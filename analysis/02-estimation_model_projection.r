@@ -268,6 +268,8 @@ winner.vars <- names(wk.results)[str_detect(names(wk.results), "_winner_")]
 dominance.vars <-  names(wk.results)[str_detect(names(wk.results), "dominance")]
 newrun.vars <-  names(wk.results)[str_detect(names(wk.results), "newrun")]
 swing.vars <-  names(wk.results)[str_detect(names(wk.results), "swing")]
+incumbent.vars <- names(wk.results)[str_detect(names(wk.results), "_inc")]
+
 
 wk.results.melt.firstshare <- melt(wk.results, id=c("wkr_nr2013"), measure.vars=firstshare.vars)
 wk.results.melt.firstshare$party <- str_extract(wk.results.melt.firstshare$variable, "cdsu|spd|fdp|gru|lin")
@@ -318,12 +320,22 @@ wk.results.melt.winner$winner <- wk.results.melt.winner$value
 wk.results.melt.winner$variable <- NULL
 wk.results.melt.winner$value <- NULL
 
+
+wk.results.melt.incumbent <- melt(wk.results, id=c("wkr_nr2013"), measure.vars=incumbent.vars)
+wk.results.melt.incumbent$party <- str_extract(wk.results.melt.incumbent$variable, "cdsu|spd|fdp|gru|lin")
+wk.results.melt.incumbent$year <- str_extract(wk.results.melt.incumbent$variable, "1990|1994|1998|2002|2005|2009|2013")
+wk.results.melt.incumbent$incumbent <- wk.results.melt.incumbent$value
+wk.results.melt.incumbent$variable <- NULL
+wk.results.melt.incumbent$value <- NULL
+
+
 wk.results.melt <- merge(wk.results.melt.firstshare, wk.results.melt.project, by=c("year", "party", "wkr_nr2013"), all = TRUE)
 wk.results.melt <- merge(wk.results.melt, wk.results.melt.lastwinner, by=c("year", "party", "wkr_nr2013"), all = TRUE)
 wk.results.melt <- merge(wk.results.melt, wk.results.melt.dominance, by=c("year", "party", "wkr_nr2013"), all = TRUE)
 wk.results.melt <- merge(wk.results.melt, wk.results.melt.newrun, by=c("year", "party", "wkr_nr2013"), all = TRUE)
 wk.results.melt <- merge(wk.results.melt, wk.results.melt.swing, by=c("year", "party", "wkr_nr2013"), all = TRUE)
 wk.results.melt <- merge(wk.results.melt, wk.results.melt.winner, by=c("year", "party", "wkr_nr2013"), all = TRUE)
+wk.results.melt <- merge(wk.results.melt, wk.results.melt.incumbent, by=c("year", "party", "wkr_nr2013"), all = TRUE)
 wk.results.melt$year <- as.factor(wk.results.melt$year)
 
 
